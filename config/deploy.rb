@@ -1,4 +1,5 @@
 require 'bundler/capistrano'
+require 'rvm/capistrano'
 default_run_options[:pty] = true
 
 set :application, "test_app"
@@ -6,6 +7,7 @@ set :user, "deployer1"
 set :deploy_to, "/var/www/#{application}"
 set :deploy_via, :remote_cache
 set :use_sudo, false
+set :rvm_ruby_string, '1.9.3-p124@test_app'
 
 set :scm, :git
 set :repository,  "git@github.com:bpd-deployer/test_app.git"
@@ -35,9 +37,11 @@ namespace :deploy do
   end
 
   task :setup_config, roles: :app do
+    run "mkdir -p #{shared_path}/config"
     put File.read("config/database.example.yml"), "#{shared_path}/config/database.yml"
     puts "Now edit the config files in #{shared_path}."
   end
+  after "deploy:setup", "deploy:setup_config"
 
   task :symlink_config, roles: :app do
     run "ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml"
