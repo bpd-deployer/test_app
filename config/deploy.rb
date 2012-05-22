@@ -7,7 +7,7 @@ set :user, "deployer1"
 set :deploy_to, "/var/www/#{application}"
 set :deploy_via, :remote_cache
 set :use_sudo, false
-set :rvm_ruby_string, '1.9.3-p194@test_app'
+set :rvm_ruby_string, '1.9.3-p194@test'
 
 set :scm, :git
 set :repository,  "git@github.com:bpd-deployer/test_app.git"
