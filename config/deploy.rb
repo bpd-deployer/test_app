@@ -19,10 +19,6 @@ server "10.25.250.111", :web, :app
 
 after "deploy", "deploy:cleanup" # only keep the last 5 releases
 
-task :hello do
-  run "echo 'hello world' > ~/hello"
-end
-
 # if you want to clean up old releases on each deploy uncomment this:
 # after "deploy:restart", "deploy:cleanup"
 
