@@ -40,10 +40,16 @@ namespace :deploy do
   end
   after "deploy:setup", "deploy:setup_config"
 
-  task :symlink_config, roles: :app do
-    run "ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml"
+  task :setup_logs, roles: :app do
+    run "mkdir -p #{shared_path}/log"
   end
-  after "deploy:finalize_update", "deploy:symlink_config"
+  after "deploy:setup", "deploy:setup_logs"
+
+  task :symlink_shared, roles: :app do
+    run "ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml"
+    run "ln -nfs #{shared_path}/log #{release_path}/log"
+  end
+  after "deploy:finalize_update", "deploy:symlink_shared"
 
   desc "Make sure local git is in sync with remote."
   task :check_revision, roles: :web do
